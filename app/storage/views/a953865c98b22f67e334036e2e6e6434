@@ -1,0 +1,98 @@
+<?php $__env->startSection('content'); ?>
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                    <h3 class="page-title">
+                        Plan Days <small>All Plan Days</small>
+                    </h3>
+                    <ul class="page-breadcrumb breadcrumb">
+
+                        <li>
+                            <i class="fa fa-home"></i>
+                            <a href="<?php echo route("home"); ?>">Home</a>
+                            <i class="fa fa-angle-right"></i>
+                        </li>
+                        <li>
+                            <a href="" style="text-decoration:none">Plan Days</a>
+                            <i class="fa fa-angle-right"></i>
+                        </li>
+                        <li>
+                            <a href="" style="text-decoration:none">All Plan Days</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                    <div class="portlet box grey-cascade">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="icon-users"></i>All Plan Days
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <?php
+                            if (Session::has('message')) {
+                                echo CommonHelper::generateHtmlAlert(Session::get('message'));
+                            }
+                            ?>
+                            <div class="table-toolbar">
+                                <a style="text-decoration:none" href="<?php echo route("newExercise"); ?>">
+                                    <div class="btn-group">
+                                        <button id="sample_editable_1_new" class="btn green">
+                                            Add New Plan <i class="fa fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </a>
+                            </div>
+                                <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                                    <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>plan ID</th>
+                                        <th>Day ID</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <?php foreach($exercise as $codes): ?>
+                                        <tr>
+                                            <td>
+                                                <?php echo $codes['id']; ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $codes['planID']; ?>
+                                            </td>
+                                            <td>
+                                                <?php echo $codes['dayID']; ?>
+                                            </td>
+                                            <td>
+                                                <a style="text-decoration:none" href="<?php echo route("newFaq", array('id' => $codes['id'])); ?>" title="Edit">
+                                                    <div class="fa fa-edit"></div>
+                                                </a>
+                                                <a style="text-decoration:none; color: #ff0000" href="<?php echo route("deleteFaq", array('id' => $codes['id'])); ?>" title="Delete">
+                                                    <div class="fa fa-trash-o"></div>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function() {
+            $('#example').DataTable();
+        } );
+    </script>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('common_templates.basic_template', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
