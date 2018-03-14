@@ -7,19 +7,25 @@ class PlanController extends \BaseController {
             $plans = new Plan();
             $plansWithdays = $plans->getPlans();
 
-            // return  $plansWithdays;
+            //  return  $plansWithdays;
 
-            $exercisesWithVideo = new PlanDayExercises();
+            // $exercisesWithVideo = new PlanDayExercises();
              // return $exercisesWithVideo;
             foreach ($plansWithdays as $key => $val) {
 
                     foreach ($val->plandays as $ke => $row) {
-                     $plansWithdays[$key]->plandays[$ke]['exercise'] = $exercisesWithVideo->getExercise($row->id);
+                     $plansWithdays[$key]->plandays[$ke]['dayExercise'] = PlanDayExercises::where('plandayID', '=', $row->id)
+                                                                          ->get();
 
+                        foreach ($row->dayExercise as $k => $r) { 
+                            $plansWithdays[$key]->plandays[$ke]->dayExercise[$k]['exVideos'] = ExerciseVideos::where('ExerciseID', '=', $r->ExerciseID)
+                                ->join('videos', 'videos.id', '=', 'exercise_videos.videoID')
+                                ->get();
+                            }                                                     
                     }
             }
 
-            return $plansWithdays->tojson();
+            // return $plansWithdays;
             // $exercise = Plan::get();
             return View :: make("plans.index", compact("plansWithdays"));
         } catch (Exception $ex) {
