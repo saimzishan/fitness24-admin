@@ -63,6 +63,23 @@ class ExerciseController extends \BaseController {
             return CommonHelper::showException($ex);
         }
     }
+    public function getAllExercse($id) {
+        try {
+            $dayID = $id;
+            $relatedExData =  PlanDayExercises::where('plandayID', '=', $id)
+                        ->join('exercise', 'exercise.id', '=', 'ExerciseID')
+                        ->select('exercise.id')
+                        ->get();
+             $Exercise = Exercise::all();
+              // return $Exercise;
+             return View :: make("plans.linkExerciseToPlanDay", compact("Exercise", "relatedExData", 'dayID' ) );
+           //  return $mainArray;
+        } catch (Exception $ex) {
+            return CommonHelper::showException($ex);
+        } catch (Illuminate\Database\QueryException $ex) {
+            return CommonHelper::showException($ex);
+        }
+    }
 
       public function postlinkedVideos($id) {
         $input = Input::all();
@@ -84,6 +101,36 @@ class ExerciseController extends \BaseController {
                 $ExVideo->exerciseID = $id;
 
                 $ExVideo->save();
+
+            }
+
+         } catch (Exception $ex) {
+            return CommonHelper::showException($ex);
+        } catch (Illuminate\Database\QueryException $ex) {
+            return CommonHelper::showException($ex);
+        }
+         return json_encode('success');
+     }     
+      public function postlinkedExs($id) {
+        $input = Input::all();
+       
+         $temp = json_decode($input['body']);
+           // return $temp->exerciseIDs;
+         try { 
+             // return json_encode($temp);
+            \Illuminate\Support\Facades\DB::table('plandayexercises')
+                                ->where('plandayID','=',$id)
+                                ->delete();
+
+             // return $temp;
+           
+            for ($i=0; $i<count($temp->exerciseIDs); $i++) {
+                $dayEx = new PlanDayExercises();
+
+                $dayEx->ExerciseID = $temp->exerciseIDs[$i];
+                $dayEx->plandayID = $id;
+
+                $dayEx->save();
 
             }
 
@@ -214,7 +261,7 @@ class ExerciseController extends \BaseController {
     {
         try {
             ExerciseVideos::destroy($id);
-            return \Illuminate\Support\Facades\Redirect::back();
+            return \Illuminate\Support\Facades\Redirect::back()->with('message', "success= Deleted Successfully.");;
         } catch (Exception $ex) {
             return CommonHelper::showException($ex);
         } catch (Illuminate\Database\QueryException $ex) {
@@ -226,7 +273,19 @@ class ExerciseController extends \BaseController {
     {
         try {
             Exercise::destroy($id);
-            return \Illuminate\Support\Facades\Redirect::back();
+            return \Illuminate\Support\Facades\Redirect::back()->with('message', "success= Deleted Successfully.");;
+        } catch (Exception $ex) {
+            return CommonHelper::showException($ex);
+        } catch (Illuminate\Database\QueryException $ex) {
+            return CommonHelper::showException($ex);
+        }
+    }
+    public function deleteExerciseOfDay($id)
+    {
+        try {
+            dd($id);
+            PlanDayExercises::destroy($id);
+            return \Illuminate\Support\Facades\Redirect::back()->with('message', "success= Deleted Successfully.");
         } catch (Exception $ex) {
             return CommonHelper::showException($ex);
         } catch (Illuminate\Database\QueryException $ex) {

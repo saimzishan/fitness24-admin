@@ -15,6 +15,8 @@ class PlanController extends \BaseController {
 
                     foreach ($val->plandays as $ke => $row) {
                      $plansWithdays[$key]->plandays[$ke]['dayExercise'] = PlanDayExercises::where('plandayID', '=', $row->id)
+                                                                            ->join('exercise', 'exercise.id', '=', 'ExerciseID')
+                                                                            ->select('exercise.id as ExerciseID', 'plandayexercises.*')
                                                                           ->get();
 
                         foreach ($row->dayExercise as $k => $r) { 

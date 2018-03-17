@@ -48,7 +48,7 @@
                             }
                             ?>
                              <div id="success-mesg" class="alert alert-success alert-dismissible">
-                                <strong>Succes</strong> Removed
+                                <strong>Succes:</strong> Update successfully
                               </div>
                             <div class="table-toolbar">
                                 <a style="text-decoration:none" href="<?php echo route("newExercise"); ?>">
@@ -215,10 +215,18 @@
     $(document).ready(function() {
         $('#example').DataTable();
     } );
-     setTimeout(function () {
-      var element = document.getElementById("success-mesg");
-      element.style.visibility = 'hidden';
-    }, 1000)
+     if (localStorage.getItem('message') == '1' ) {
+                                 setTimeout(function () {
+                                var element = document.getElementById("success-mesg");
+                                element.style.visibility = 'hidden';
+                              }, 2000)
+                                  localStorage.setItem('message', '');
+                              } else {
+                                 setTimeout(function () {
+                                var element = document.getElementById("success-mesg");
+                                element.style.visibility = 'hidden';
+                              }, 0)
+                              }
 
     function relatedVideos(excerciseID){
         localStorage.setItem("excerciseID", excerciseID);
@@ -270,7 +278,7 @@
                    // location.reload();
                    relatedVideos(excerciseID);
 
-                   localStorage.setItem('successs',1);
+                   localStorage.setItem('successs','1');
                    var temp = document.getElementById("success-messgae");
                    temp.innerHTML = "<strong>Success</strong> Record removed..";
                },

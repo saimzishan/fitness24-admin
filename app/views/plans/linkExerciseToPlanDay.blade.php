@@ -7,12 +7,12 @@
                 echo CommonHelper::generateHtmlAlert(Session::get('message'));
             }
             ?>
-        <!-- BEGIN PAGE HEADER-->
+             <!-- BEGIN PAGE HEADER-->
         <div class="row">
         	<div class="col-md-12">
                 <!-- BEGIN PAGE TITLE & BREADCRUMB-->
                 <h3 class="page-title">
-                    Videos <small>Link videos to Exercise</small>
+                    Plans <small>Link Exercise To Single Paln Day</small>
                 </h3>
                 <ul class="page-breadcrumb breadcrumb">
                     <li>
@@ -25,28 +25,30 @@
                 <!-- END PAGE TITLE & BREADCRUMB-->
             </div>
         </div>
-        <div class="row">
+
+		<div class="row">
 			<div class="col-md-12">
-				<input type="hidden" name="exID" id="exID" value="{{$exID}}">
-			    <label>Select Video(s)</label>
-			    <table id="sample_1" class="table table-striped table-bordered table-hover">
-			        <thead>
-			        <tr>
-			            <th class="hidden">id</th>
-			            <th>Select/Un-Select</th>
-			            <th>Title</th>
-			            <th>Image</th>
-			        </tr>
-			        </thead>
-			        <tbody>
-			            @foreach($videos as $row)
-			                <tr>
-			                    <td class="hidden">
-			                        {{$row->id}}
-			                    </td>
-			                    <td>
-			                    	<?php $check = -1?>
-			                    	@foreach($relatedVideoData as $val)
+				<input type="hidden" name="dayIDd" id="dayID" value="{{$dayID}}">
+			    <label>Select Exercise(s)</label>
+    			<table id="sample_1" class="table table-striped table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <th class="hidden">
+                           id
+                        </th>
+                        <th>Select/Un-Select</th>
+                        <th>Title</th>
+                        <th>Image</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($Exercise as $row)
+                            <tr>
+                                <td class="hidden"><input type="number" name="dayID" value="{{$row->id}}"></td>
+                                <td>
+
+                                	<?php $check = -1?>
+			                    	@foreach($relatedExData as $val)
 			                    		@if($val->id == $row->id)
 			                    			<?php $check = 1;?>
 			                    		@endif
@@ -56,27 +58,27 @@
 			                        @else 
 			                         <input type="checkbox" class="videoCheckbox" id="{{$row->id}}">
 			                        @endif
-			                    </td>
-			                    <td>
-			                       {{$row->title_en}}
-			                    </td>
-			                    <td>
-			                        <img src="{{CommonHelper::$driver['s3_uploads'] . 'Images/'.$row->thumb}}" width="80"/>
-			                    </td>
-			                </tr>
-			             @endforeach
-			        </tbody>
-			    </table>
 
-			</div>
-		</div>	
-		<input type="button" id="SubmitForm" class="btn green" value="Save">	
-	</div>
+                                   
+                                    {{$row->title}}
+                                </td>
+                                <td>  {{$row->description}}  </td>
+                                <td>
+                                    <img src="{{CommonHelper::$driver['s3_uploads'] . 'Images/'.$row->image}}" width="80"/>
+                                </td>
+                            </tr>
+                           
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>  
+<input type="button" id="SubmitForm" class="btn green" value="Save">	
+    </div>
 </div>
 
-<script>
- 
-      $(document).ready(function () {
+<script type="text/javascript">
+    $(document).ready(function () {
             var table = $('#sample_1');
             // begin first table
             table.dataTable({
@@ -119,7 +121,8 @@
             });
 
         });
-        $("#SubmitForm").click(function() {
+    
+	$("#SubmitForm").click(function() {
 
             var checkedValue = [];
             var inputElements = document.getElementsByClassName('videoCheckbox');
@@ -128,16 +131,18 @@
                     checkedValue.push(inputElements[i].id);
                 }
             }
-            var exerciseID = document.getElementById('exID').value;
+            var dayID = document.getElementById('dayID').value;
             var body = JSON.stringify({ exerciseIDs: checkedValue})
             $.ajax({
                 type: "POST",
-                url: '/postlinkedVideos/'+exerciseID,
+                url: '/postlinkedExs/'+dayID,
                 data: {body: body},
                 dataType: 'json',
                 success: function( msg ) {
-                    localStorage.setItem('message', "1");
-                    window.location = "/listAllExercise";
+                   // console.log(msg);
+                   localStorage.setItem('message', "1");
+                    //console.log(localStorage.getItem('message') );
+                    window.location = "/listAllPlans";
                 },
                 error: function(data){
                     console.log(errors);
@@ -146,6 +151,5 @@
             });
         
     } );
-
 </script>
 @stop

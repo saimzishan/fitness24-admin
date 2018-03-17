@@ -1,5 +1,4 @@
-@extends('common_templates.basic_template')
-@section('content')
+<?php $__env->startSection('content'); ?>
 <div class="page-content-wrapper">
     <div class="page-content">
          <?php
@@ -27,7 +26,7 @@
         </div>
         <div class="row">
 			<div class="col-md-12">
-				<input type="hidden" name="exID" id="exID" value="{{$exID}}">
+				<input type="hidden" name="exID" id="exID" value="<?php echo $exID; ?>">
 			    <label>Select Video(s)</label>
 			    <table id="sample_1" class="table table-striped table-bordered table-hover">
 			        <thead>
@@ -39,32 +38,34 @@
 			        </tr>
 			        </thead>
 			        <tbody>
-			            @foreach($videos as $row)
+			            <?php foreach($videos as $row): ?>
 			                <tr>
 			                    <td class="hidden">
-			                        {{$row->id}}
+			                        <?php echo $row->id; ?>
+
 			                    </td>
 			                    <td>
 			                    	<?php $check = -1?>
-			                    	@foreach($relatedVideoData as $val)
-			                    		@if($val->id == $row->id)
+			                    	<?php foreach($relatedVideoData as $val): ?>
+			                    		<?php if($val->id == $row->id): ?>
 			                    			<?php $check = 1;?>
-			                    		@endif
-			                    	@endforeach
-			                    	@if($check === 1)
-			                        <input type="checkbox" checked="true" class="videoCheckbox" id="{{$row->id}}">
-			                        @else 
-			                         <input type="checkbox" class="videoCheckbox" id="{{$row->id}}">
-			                        @endif
+			                    		<?php endif; ?>
+			                    	<?php endforeach; ?>
+			                    	<?php if($check === 1): ?>
+			                        <input type="checkbox" checked="true" class="videoCheckbox" id="<?php echo $row->id; ?>">
+			                        <?php else: ?> 
+			                         <input type="checkbox" class="videoCheckbox" id="<?php echo $row->id; ?>">
+			                        <?php endif; ?>
 			                    </td>
 			                    <td>
-			                       {{$row->title_en}}
+			                       <?php echo $row->title_en; ?>
+
 			                    </td>
 			                    <td>
-			                        <img src="{{CommonHelper::$driver['s3_uploads'] . 'Images/'.$row->thumb}}" width="80"/>
+			                        <img src="<?php echo CommonHelper::$driver['s3_uploads'] . 'Images/'.$row->thumb; ?>" width="80"/>
 			                    </td>
 			                </tr>
-			             @endforeach
+			             <?php endforeach; ?>
 			        </tbody>
 			    </table>
 
@@ -148,4 +149,5 @@
     } );
 
 </script>
-@stop
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('common_templates.basic_template', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

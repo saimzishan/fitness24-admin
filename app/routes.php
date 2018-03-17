@@ -157,11 +157,16 @@ Route::post('postFaq', array('as' => 'postFaq', 'uses' => 'GoalsController@post_
     Route::get('removeExerciseVideo/{id}', array('as' => 'removeExerciseVideo', 'uses' => 'ExerciseVideosController@removeVideo'));
 
     Route::get('getAllVideos/{id}', array('as' => 'getAllVideos', 'uses' => 'ExerciseController@getAllVideos'));
+    Route::get('getAllExercse/{id}', array('as' => 'getAllExercse', 'uses' => 'ExerciseController@getAllExercse'));
 
     Route::post('postlinkedVideos/{id?}', array('as' => 'postlinkedVideos', 'uses' => 'ExerciseController@postlinkedVideos'));
+    Route::post('postlinkedExs/{id?}', array('as' => 'postlinkedExs', 'uses' => 'ExerciseController@postlinkedExs'));
 
     Route::get('relatedVideos/{id}', array('as' => 'relatedVideos', 'uses' => 'ExerciseController@getRelatedVideos'));
     Route::post('postExercise/{id?}', array('as' => 'postExercise', 'uses' => 'ExerciseController@store'));
+
+        Route::get('deleteExerciseOfDay/{id}', array('as' => 'deleteExerciseOfDay', 'uses' => 'ExerciseController@deleteExerciseOfDay'));
+
 //  =============================   Rotes for Plan ===================== ////
 
     Route::get('listAllPlans', array('as' => 'listAllPlans', 'uses' => 'PlanController@index'));

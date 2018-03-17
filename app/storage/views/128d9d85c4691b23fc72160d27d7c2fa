@@ -43,9 +43,29 @@
                         <div class="portlet-body">
                             <?php
                             if (Session::has('message')) {
+                              
                                 echo CommonHelper::generateHtmlAlert(Session::get('message'));
                             }
                             ?>
+                            <script type="text/javascript">
+                             
+                              if (localStorage.getItem('message') == '1' ) {
+                                 setTimeout(function () {
+                                var element = document.getElementById("success-mesg");
+                                element.style.visibility = 'hidden';
+                              }, 2000)
+                                  localStorage.setItem('message', '');
+                              } else {
+                                 setTimeout(function () {
+                                var element = document.getElementById("success-mesg");
+                                element.style.visibility = 'hidden';
+                              }, 0)
+                              }
+                           
+                            </script>
+                            <div id="success-mesg" class="alert alert-success alert-dismissible">
+                                <strong>Succes:</strong> Plan Days Updated Successfully.
+                              </div>
                             <div class="table-toolbar">
                                 <a style="text-decoration:none" href="<?php echo route("newPlan"); ?>">
                                     <div class="btn-group">
@@ -100,9 +120,9 @@
                                                 <br>
                                                     <div class="row" style="padding: 10px; background-color: #EEEEEE; margin-top: 10px">
                                                       <div class="col-md-1">ID</div>  
-                                                      <div class="col-md-2">planID</div>  
-                                                      <div class="col-md-1">dayID</div>  
-                                                      <div class="col-md-3">created_at</div>
+                                                      <div class="col-md-2">PlanID</div>  
+                                                      <div class="col-md-1">DayID</div>  
+                                                      <div class="col-md-3">Created_at</div>
                                                         <div class="col-md-3">Plan Days Exercises</div>  
 
                                                       <div class="col-md-2">Action</div>  
@@ -121,6 +141,14 @@
                                                       </div>
                                                       <div class="col-md-2">  <?php echo $planDay['number_of_weeks']; ?>
                                                   </div>
+                                                   <div class="col-md-2">
+                                                                            <a  href="<?php echo route("getAllExercse", array('id' => $planDay['id'])); ?>" title="Add viedo">
+                                                 
+                                                  <i class="fa fa-plus-square"></i>
+                                                   
+                                                </a>
+
+                                                                          </div>
                                                   </div>
                                                   <br>
                                                   <!-- Plan days Exercises -->
@@ -153,6 +181,12 @@
                                                                                 <span class="fa fa-angle-down"></span>
                                                                             </button>
                                                                           </div>
+                                                                          <div class="col-md-2">
+                                                                            <a  onclick="return confirm('Are you sure you want to delete this exercise?');" href="<?php echo route("deleteExerciseOfDay", array('id' => $planDayExer['id'])); ?>" title="Delete">
+                                                    <div style="font-size: 22px;color: black;" class="fa fa-trash-o"></div>
+                                                </a>
+                                                                          </div>
+                                                                         
                                                          </div>
 
               <!-- ex_videos -->
