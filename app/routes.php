@@ -192,6 +192,18 @@ Route::post('postFaq', array('as' => 'postFaq', 'uses' => 'GoalsController@post_
     Route::post('postPlanDayExercise', array('as' => 'postPlanDayExercise', 'uses' => 'PlanDayExerciseController@store'));
 
     Route::get('renderHtml/{id?}', array('as' => 'renderHtml', 'uses' => 'PlanDayExerciseController@renderHtml'));
+
+
+    //  =============================   Rotes for challenges ===================== ////
+
+    Route::get('viewAllChallenges', array('as' => 'viewAllChallenges', 'uses' => 'challengeController@viewAllChallenges'));
+    Route::get('newChallenges/{id?}', array('as' => 'newChallenges', 'uses' => 'challengeController@create'));
+    Route::get('deleteChallenges/{id}', array('as' => 'deleteChallenges', 'uses' => 'challengeController@destroy'));
+    Route::post('postChallenges', array('as' => 'postChallenges', 'uses' => 'challengeController@store'));
+    Route::post('postChallengesTolavel', array('as' => 'postChallengesTolavel', 'uses' => 'challengeController@storeLevel'));
+    Route::post('postSetsTolavelday', array('as' => 'postSetsTolavelday', 'uses' => 'challengeController@updateDays'));
+
+    Route::get('renderNewHtml/{id?}/{cId?}', array('as' => 'renderNewHtml', 'uses' => 'challengeController@renderNewHtml'));
 #=========================== Application Routes End ==============================
 });
 

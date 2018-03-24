@@ -206,6 +206,23 @@
                     </li>
                 </ul>
             </li>
+            <li>
+                <a href="#">
+                    <i class="icon-cloud-upload"></i>
+                    <span class="title">challenges</span>
+                    <span class="arrow "></span>
+                </a>
+                <ul class="sub-menu">
+                    <li>
+                        <a href="<?php echo route("newChallenges") ?>">
+                            Add New challenge</a>
+                    </li>
+                    <li>
+                        <a href="<?php echo route("viewAllChallenges"); ?>">
+                            View All challenges</a>
+                    </li>
+                </ul>
+            </li>
 
         </ul>
         <!-- END SIDEBAR MENU -->

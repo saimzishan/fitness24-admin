@@ -67,9 +67,9 @@
                                             <label>Gender</label>
                                             <div class="input-group" style="width: 100%">
                                                 <?php if(isset($faq) ): ?>
-                                                    <select disabled name="gender" style="width: 80% "id="gender"  required>
+                                                    <select disabled name="gender" style="width: 80% " id="gender"  required>
                                                 <?php else: ?>
-                                                    <select name="gender" style="width: 80% "id="gender" required>
+                                                    <select name="gender" style="width: 80% " id="gender" required>
                                                 <?php endif; ?>
                                                     <option value="0">--Select--</option>
                                                     <?php if(isset($faq)): ?>
