@@ -1,4 +1,5 @@
-<?php $__env->startSection('content'); ?>
+@extends('common_templates.basic_template')
+@section('content')
 <style type="text/css">
      #loading {
         width: 100%;
@@ -94,20 +95,23 @@
                                       <div class="col-md-1">Action</div>  
                                     
                                 </div>
-                                <?php foreach($plansWithdays as $codes): ?>
+                                @foreach($plansWithdays as $codes)
                                     <div class="row" style="padding: 10px; background-color: #B0BEC5">
                                       <div class="col-md-1"> <?php echo $codes['id']; ?></div>  
                                       <div class="col-md-2"><?php echo $codes['Name']; ?></div>  
                                       <div class="col-md-2"><?php echo $codes['No_Of_Levels'];?></div>  
                                       <div class="col-md-2"> <?php echo $codes['created_at']; ?></div>  
                                       <div class="col-md-2">
-                                           <button style="color:eeeeee ;background-color:#eeeeee class="btn btn-xs btn-info" data-toggle="collapse" data-target="#videoColaps<?php echo $codes['id']; ?>">
+                                           <button style="color:eeeeee ;background-color:#eeeeee class="btn btn-xs btn-info" data-toggle="collapse" data-target="#videoColaps{{ $codes['id']}}">
                                                 <span class="fa fa-angle-down"></span>
                                             </button>
                                       </div>
+                                      <div class="col-md-1">
+                                        <a onclick="return confirm('Are you sure you want to delete this challeng Level?');" href="<?php echo route("deleteChallenge", array('id' => $codes['id'])); ?>" class="btn btn-xs btn-danger"><i class="fa fa-trash-o"></i> </a>
+                                      </div>
                                                                           </div> 
                                     <div class="container-fluid">
-                                      <div id="videoColaps<?php echo $codes['id']; ?>" class="collapse">  
+                                      <div id="videoColaps{{$codes['id']}}" class="collapse">  
                                          <div class="row well">
                                               <div class="col-md-1">ID</div>  
                                               <div class="col-md-2">challengeID</div>  
@@ -117,7 +121,7 @@
                                               <div class="col-md-1">Days</div>
                                               <div class="col-md-1">Action</div>
                                             </div>
-                                            <?php foreach($codes->Levels as $row): ?>
+                                            @foreach($codes->Levels as $row)
                                              <div class="row" style="padding: 10px; background-color: #CFD8DC; margin-top: 10px">
                                                  <div class="col-md-1"> <?php echo $row['id']; ?></div>  
                                                   <div class="col-md-2"><?php echo $row['challengeID']; ?></div>  
@@ -125,17 +129,19 @@
                                                   <div class="col-md-2"> <?php echo $row['No_Of_Days']; ?></div>
                                                   <div class="col-md-2"> <?php echo $row['created_at']; ?></div> 
                                                   <div class="col-md-1"> 
-                                                        <button style="color:eeeeee ;background-color:#eeeeee class="btn btn-xs btn-info" data-toggle="collapse" data-target="#Challengelevelday<?php echo $row['id']; ?>">
+                                                        <button style="color:eeeeee ;background-color:#eeeeee class="btn btn-xs btn-info" data-toggle="collapse" data-target="#Challengelevelday{{ $row['id']}}">
                                                             <span class="fa fa-angle-down"></span>
                                                         </button>
                                                     </div> 
-                                                <div class="col-md-1"><button onclick="openModel(<?php echo $row['id']; ?>)" class="btn btn-xs btn-info"><i class="fa fa-plus-square"></i> Add days </button></div>
+                                                <div class="col-md-1"><a  onclick="openModel({{$row['id']}})" class="btn btn-xs btn-info"><i class="fa fa-plus-square"></i> </a> |
+                                                  <a onclick="return confirm('Are you sure you want to delete this challeng?');" href="<?php echo route("deleteChallengeLevel", array('id' => $row['id'])); ?>" class="btn btn-xs btn-danger"><i class="fa fa-trash-o"></i> </a>
+                                                </div>
 
                                               </div>
 
                                                <div class="container-fluid" style="">
                                                  
-                                                 <div id="Challengelevelday<?php echo $row['id']; ?>" class="collapse">
+                                                 <div id="Challengelevelday{{$row['id']}}" class="collapse">
                                                   
                                                      <!-- header EEEEEE -->
                                                     <div class="row well">
@@ -145,9 +151,9 @@
                                                       <div class="col-md-2">No_of_Sets</div>
                                                         <div class="col-md-2">Repetition</div>  
                                                         <div class="col-md-2">created_at</div>
-                                                        <div class="col-md-1">Action</div>
+                                                        <div class="col-md-2">Action</div>
                                                     </div> 
-                                                   <?php foreach($row->Challengelevelday as $r): ?>
+                                                   @foreach($row->Challengelevelday as $r)
                                                     <div class="row" style="padding: 1%; background-color: #B0BEC5">
                                                       <div class="col-md-1"> <?php echo $r['id']; ?></div>  
                                                       <div class="col-md-2"><?php echo $r['challengeLevelID']; ?></div>  
@@ -155,20 +161,22 @@
                                                       <div class="col-md-2"> <?php echo $r['No_of_Sets']; ?></div>
                                                       <div class="col-md-2"> <?php echo $r['Repetition']; ?></div>
                                                       <div class="col-md-2"> <?php echo $r['created_at']; ?></div>
-                                                      <div class="col-md-2"> 
-                                                         <div class="col-md-1"><button onclick="daySetModal(<?php echo $r['id']; ?>)" class="btn btn-xs btn-info"><i class="fa fa-plus-square"></i> Add Repetition </button></div>
-                                                      </div>
+                                                      
+                                                         <div class="col-md-2"><button onclick="daySetModal({{$r['id']}})" class="btn btn-xs btn-info"><i class="fa fa-plus-square"></i></button> |
+                                                         <a onclick="return confirm('Are you sure you want to delete this challeng Level Day?');" href="<?php echo route("deleteChallengeLevelDays", array('id' => $r['id'])); ?>" class="btn btn-xs btn-danger"><i class="fa fa-trash-o"></i> </a>
+                                                         </div>
+                                                      
                                                     </div>
                                                     <br>
-                                                   <?php endforeach; ?>
+                                                   @endforeach
                                                  </div>
                                                 </div>
                                                 <br>
-                                            <?php endforeach; ?>
+                                            @endforeach
                                         </div>
                                     </div>
                                     <br>
-                                <?php endforeach; ?>   
+                                @endforeach   
                             </div>
                         <!-- <table id="example" class="display" width="100%"></table> -->
                     </div>
@@ -188,9 +196,9 @@
              <h4 class="modal-title">Add Days</h4>
         </div>
         <div class="modal-body">
-         <form method="post" action="<?php echo route('postChallengesTolavel'); ?>" id='ajax-contact'>
+         <form method="post" action="{{route('postChallengesTolavel')}}" id='ajax-contact'>
           <input type="hidden" name="challgId" id ='challgId'>
-          <input type="hidden" name="" value="<?php echo csrf_token(); ?>">
+          <input type="hidden" name="" value="{{csrf_token()}}">
             <div class="form-group">
                 <label>Number of Day</label>
                 <div class="input-group" style="width: 50%">
@@ -223,9 +231,9 @@
              <h4 class="modal-title">Add Repetition</h4>
         </div>
         <div class="modal-body">
-         <form method="post" action="<?php echo route('postSetsTolavelday'); ?>" id='ajax-contacts'>
+         <form method="post" action="{{route('postSetsTolavelday')}}" id='ajax-contacts'>
           <input type="hidden" name="dayID" id ='dayID'>
-          <input type="hidden" name="" value="<?php echo csrf_token(); ?>">
+          <input type="hidden" name="" value="{{csrf_token()}}">
             <div class="form-group">
                 <label>Number Repetition</label>
                 <div class="input-group" style="width: 50%">
@@ -267,8 +275,8 @@
         } );
 
     $(document).ready(function () {
-       $("#videoColaps1 .collapse").addClass('in');
-       alert('jj');
+       // $('#videoColaps1').addClass('in'); 
+       // $('#Challengelevelday1').addClass('in'); 
         var table = $('#sample_1');
         // begin first table
         table.dataTable({
@@ -318,5 +326,4 @@
 
    
 </script>
-<?php $__env->stopSection(); ?>
-<?php echo $__env->make('common_templates.basic_template', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+@stop

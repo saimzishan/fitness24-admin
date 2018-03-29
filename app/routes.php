@@ -203,6 +203,12 @@ Route::post('postFaq', array('as' => 'postFaq', 'uses' => 'GoalsController@post_
     Route::post('postChallengesTolavel', array('as' => 'postChallengesTolavel', 'uses' => 'challengeController@storeLevel'));
     Route::post('postSetsTolavelday', array('as' => 'postSetsTolavelday', 'uses' => 'challengeController@updateDays'));
 
+    Route::get('deleteChallenge/{id}', array('as' => 'deleteChallenge', 'uses' => 'challengeController@deleteChallenge'));
+    
+    Route::get('deleteChallengeLevel/{id}', array('as' => 'deleteChallengeLevel', 'uses' => 'challengeController@deleteChallengeLevel'));
+
+    Route::get('deleteChallengeLevelDays/{id}', array('as' => 'deleteChallengeLevelDays', 'uses' => 'challengeController@deleteChallengeLevelDays'));
+
     Route::get('renderNewHtml/{id?}/{cId?}', array('as' => 'renderNewHtml', 'uses' => 'challengeController@renderNewHtml'));
 #=========================== Application Routes End ==============================
 });

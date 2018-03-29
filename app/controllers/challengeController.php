@@ -14,7 +14,7 @@ class challengeController extends \BaseController {
                    }
             }
              // return $plansWithdays;
-            return View:: make("challenges.index", compact("plansWithdays"));
+            return View:: make("challenges.main", compact("plansWithdays"));
         } catch (Exception $ex) {
             return CommonHelper::showException($ex);
         } catch (Illuminate\Database\QueryException $ex) {
@@ -171,5 +171,35 @@ class challengeController extends \BaseController {
         } catch (Illuminate\Database\QueryException $ex) {
             return CommonHelper::showException($ex);
         }  
+    }
+    public function deleteChallenge($id) {
+         try {
+            Challenge::destroy($id);
+            return \Illuminate\Support\Facades\Redirect::back()->with('message', 'success= Successfully Deleted..' );;
+        } catch (Exception $ex) {
+        return CommonHelper::showException($ex);
+        } catch (Illuminate\Database\QueryException $ex) {
+            return CommonHelper::showException($ex);
+        }
+    }
+     public function deleteChallengeLevel($id) {
+         try {
+            Challengelevels::destroy($id);
+            return \Illuminate\Support\Facades\Redirect::back()->with('message', 'success= Successfully Deleted..' );;
+        } catch (Exception $ex) {
+        return CommonHelper::showException($ex);
+        } catch (Illuminate\Database\QueryException $ex) {
+            return CommonHelper::showException($ex);
+        }
+    }
+     public function deleteChallengeLevelDays($id) {
+         try {
+            Challengeleveldays::destroy($id);
+            return \Illuminate\Support\Facades\Redirect::back()->with('message', 'success= Successfully Deleted..' );
+        } catch (Exception $ex) {
+        return CommonHelper::showException($ex);
+        } catch (Illuminate\Database\QueryException $ex) {
+            return CommonHelper::showException($ex);
+        }
     }
 }
