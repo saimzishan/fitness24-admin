@@ -107,6 +107,9 @@
                                             </button>
                                       </div>
                                       <div class="col-md-1">
+                                        <a type="btn btn-info" onclick="showUpdateChallengesModel({{$codes['id']}}, {{$codes['No_Of_Levels']}} )">
+                                          <i class="fa fa-edit"></i>
+                                        </a>|
                                         <a onclick="return confirm('Are you sure you want to delete this challeng Level?');" href="<?php echo route("deleteChallenge", array('id' => $codes['id'])); ?>" class="btn btn-xs btn-danger"><i class="fa fa-trash-o"></i> </a>
                                       </div>
                                                                           </div> 
@@ -116,7 +119,7 @@
                                               <div class="col-md-1">ID</div>  
                                               <div class="col-md-2">challengeID</div>  
                                               <div class="col-md-1">level</div>  
-                                              <div class="col-md-2">No_Of_Days</div>  
+                                              <div class="col-md-1">Days</div>  
                                               <div class="col-md-2">Created at</div>    
                                               <div class="col-md-1">Days</div>
                                               <div class="col-md-1">Action</div>
@@ -126,14 +129,16 @@
                                                  <div class="col-md-1"> <?php echo $row['id']; ?></div>  
                                                   <div class="col-md-2"><?php echo $row['challengeID']; ?></div>  
                                                   <div class="col-md-1"><?php echo $row['level'];?></div>  
-                                                  <div class="col-md-2"> <?php echo $row['No_Of_Days']; ?></div>
+                                                  <div class="col-md-1"> <?php echo $row['No_Of_Days']; ?></div>
                                                   <div class="col-md-2"> <?php echo $row['created_at']; ?></div> 
                                                   <div class="col-md-1"> 
                                                         <button style="color:eeeeee ;background-color:#eeeeee class="btn btn-xs btn-info" data-toggle="collapse" data-target="#Challengelevelday{{ $row['id']}}">
                                                             <span class="fa fa-angle-down"></span>
                                                         </button>
                                                     </div> 
-                                                <div class="col-md-1"><a  onclick="openModel({{$row['id']}})" class="btn btn-xs btn-info"><i class="fa fa-plus-square"></i> </a> |
+                                                <div class="col-md-2">
+                                                  <a  onclick="openModel({{$row['id']}}, {{$row['challengeID']}})" class="btn btn-xs btn-info"><i class="fa fa-plus-square"></i> </a> |
+                                                
                                                   <a onclick="return confirm('Are you sure you want to delete this challeng?');" href="<?php echo route("deleteChallengeLevel", array('id' => $row['id'])); ?>" class="btn btn-xs btn-danger"><i class="fa fa-trash-o"></i> </a>
                                                 </div>
 
@@ -146,23 +151,26 @@
                                                      <!-- header EEEEEE -->
                                                     <div class="row well">
                                                       <div class="col-md-1">Id</div>  
-                                                      <div class="col-md-2">ChallengeLevelID</div>  
+                                                      <div class="col-md-1">Level ID</div>  
                                                       <div class="col-md-1">DaySeq</div>  
                                                       <div class="col-md-2">No_of_Sets</div>
                                                         <div class="col-md-2">Repetition</div>  
                                                         <div class="col-md-2">created_at</div>
-                                                        <div class="col-md-2">Action</div>
+                                                        <div class="col-md-3">Action</div>
                                                     </div> 
                                                    @foreach($row->Challengelevelday as $r)
                                                     <div class="row" style="padding: 1%; background-color: #B0BEC5">
                                                       <div class="col-md-1"> <?php echo $r['id']; ?></div>  
-                                                      <div class="col-md-2"><?php echo $r['challengeLevelID']; ?></div>  
+                                                      <div class="col-md-1"><?php echo $r['challengeLevelID']; ?></div>  
                                                       <div class="col-md-1"><?php echo $r['DaySeq'];?></div>  
                                                       <div class="col-md-2"> <?php echo $r['No_of_Sets']; ?></div>
                                                       <div class="col-md-2"> <?php echo $r['Repetition']; ?></div>
                                                       <div class="col-md-2"> <?php echo $r['created_at']; ?></div>
                                                       
-                                                         <div class="col-md-2"><button onclick="daySetModal({{$r['id']}})" class="btn btn-xs btn-info"><i class="fa fa-plus-square"></i></button> |
+                                                         <div class="col-md-3"><button onclick="daySetModal({{$r['id']}}, {{$row['id']}}, {{$codes['id']}})" class="btn btn-xs btn-info"><i class="fa fa-plus-square"></i></button> |
+                                                           <a type="btn btn-info" onclick="openChallengesDaysModel({{$r['id']}},{{ $r['No_of_Sets']}} ,{{ $r['Repetition']}},{{$row['id']}}, {{$codes['id']}})">
+                                                            <i class="fa fa-edit"></i>
+                                                          </a>|
                                                          <a onclick="return confirm('Are you sure you want to delete this challeng Level Day?');" href="<?php echo route("deleteChallengeLevelDays", array('id' => $r['id'])); ?>" class="btn btn-xs btn-danger"><i class="fa fa-trash-o"></i> </a>
                                                          </div>
                                                       
@@ -202,13 +210,13 @@
             <div class="form-group">
                 <label>Number of Day</label>
                 <div class="input-group" style="width: 50%">
-                  <input type="number" name="No_Of_Days" id="No_Of_Days" class="form-control">
+                  <input type="number" min="1" name="No_Of_Days" id="No_Of_Days" class="form-control">
                 </div>
             </div>
             <div class="form-group">
                 <label>Sets</label>
                 <div class="input-group" style="width: 50%">
-                  <input type="number" name="No_of_Sets" id="No_of_Sets" class="form-control">
+                  <input type="number" min="1" name="No_of_Sets" id="No_of_Sets" class="form-control">
                 </div>
             </div>
          </form>  
@@ -221,6 +229,7 @@
     </div>
 
     </div> 
+
      <div id="daySetModal" class="modal fade" role="dialog">
          <div class="modal-dialog">
     
@@ -237,7 +246,7 @@
             <div class="form-group">
                 <label>Number Repetition</label>
                 <div class="input-group" style="width: 50%">
-                  <input type="number" name="Repetition" id="Repetition" class="form-control">
+                  <input type="number" min="1" name="Repetition" id="Repetition" class="form-control">
                 </div>
             </div>
          </form>  
@@ -250,17 +259,111 @@
     </div>
 
     </div>
+
+    <!-- update Challenges Model -->
+      <div id="updateChallengesModel" class="modal fade" role="dialog">
+         <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+             <h4 class="modal-title">Updating no of levels</h4>
+        </div>
+        <div class="modal-body">
+         <form method="post" action="{{route('updateChallenge')}}" id='ajax-contactss'>
+          <input type="hidden" name="challengeID" id ='challengeID'>
+          <input type="hidden" name="" value="{{csrf_token()}}">
+            <div class="form-group">
+                <label>Number of levels</label>
+                <div class="input-group" style="width: 50%">
+                  <input type="number" name="No_Of_Levels" id="No_Of_LevelsOld" min="1" class="form-control">
+                </div>
+            </div>
+         </form>  
+        </div>
+        <div class="modal-footer">
+            <input type="submit" id="No_Of_Levelsss" class="btn green" value="Save">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+
+    </div>
+    <!-- update Challenges Model -->
+      <!-- update Challenges days Model -->
+      <div id="updateChallengesDays" class="modal fade" role="dialog">
+         <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+             <h4 class="modal-title">Updating</h4>
+        </div>
+        <div class="modal-body">
+         <form method="post" action="{{route('updateChallengeLevelDays')}}" id='updateChallengesdays'>
+          <input type="hidden" name="id" id ='challengeDayID'>
+          <input type="hidden" name="" value="{{csrf_token()}}">
+            <div class="form-group">
+                <label>Number of Sets</label>
+                <div class="input-group" style="width: 50%">
+                  <input type="number" name="No_of_Sets" id="No_of_SetsOld" min="1" class="form-control">
+                </div>
+            </div>
+              <div class="form-group">
+                  <label>Number of Repetition</label>
+                  <div class="input-group" style="width: 50%">
+                    <input type="number" name="Repetition" id="RepetitionOld" min="1" class="form-control">
+                  </div>
+              </div>
+         </form>  
+        </div>
+        <div class="modal-footer">
+            <input type="submit" id="updateDayNRep" class="btn green" value="Save">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+
+    </div>
+    <!-- update Challenges Model -->
+
+
     </div>
 
 <script>
-  function openModel(id) {
+  function openModel(id, pId) {
+        localStorage.setItem('videoColaps' ,pId);
    document.getElementById("challgId").value = id;
     $('#levelModal').modal('show')
   }
-  function daySetModal(id) {
+  function daySetModal(id, p1id , p2id) {
+     localStorage.setItem('videoColaps' ,p2id);
+        localStorage.setItem('Challengelevelday' ,p1id);
    document.getElementById("dayID").value = id;
     $('#daySetModal').modal('show')
   }
+
+   function openChallengesDaysModel(id, oldS, oldR, p1id , p2id) {
+   document.getElementById("challengeDayID").value = id;
+
+   document.getElementById("No_of_SetsOld").value = oldS;
+   document.getElementById("RepetitionOld").value = oldR;
+
+    localStorage.setItem('videoColaps' ,p2id);
+        localStorage.setItem('Challengelevelday' ,p1id);
+    $('#updateChallengesDays').modal('show')
+  }
+
+  let globelVar = -1;
+   function showUpdateChallengesModel(id, oldVal) {
+   document.getElementById("challengeID").value = id;
+   document.getElementById("No_Of_LevelsOld").value = oldVal;
+   globelVar = oldVal;
+    localStorage.setItem('videoColaps' ,id);
+    $('#updateChallengesModel').modal('show')
+    }
    
 
          $("#SubmitForm").click(function() {
@@ -273,8 +376,32 @@
              
             form.submit();
         } );
+          $("#updateDayNRep").click(function(){
+            var form = document.getElementById("updateChallengesdays");
+             
+            form.submit();
+        } );
+          // <!-- update Challenges submit -->
+    $("#No_Of_Levelsss").click(function(){
+            var form = $("#ajax-contactss").serializeArray();
+             var forms = document.getElementById("ajax-contactss");
+            if(globelVar > form[1].value ) {
+              alert('The value of level should be greterthen old ('+globelVar+') value');
+              return;
+            }
+            forms.submit();
+        } );
+
 
     $(document).ready(function () {
+      if(localStorage.getItem('videoColaps') ) {
+        $('#videoColaps'+localStorage.getItem('videoColaps')).addClass('in');
+        localStorage.removeItem('videoColaps');
+      }
+      if(localStorage.getItem('Challengelevelday')) {
+          $('#Challengelevelday'+localStorage.getItem('Challengelevelday')).addClass('in');
+        localStorage.removeItem('Challengelevelday');
+      }
        // $('#videoColaps1').addClass('in'); 
        // $('#Challengelevelday1').addClass('in'); 
         var table = $('#sample_1');

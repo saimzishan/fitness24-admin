@@ -28,7 +28,7 @@ class challengeController extends \BaseController {
             $cNames =  ['name'=> ['--Select--','Push up', 'Sit up', 'Squats'], 'default'=>0];
             if ($id) {
                 $temp = new Challenge();
-                $faq = Challenge::where('id','=',$id)->first();
+                $faq = Challenge::where('ch_id','=',$id)->first();
             }
             $ex = Exercise::paginate(10);
 
@@ -46,7 +46,7 @@ class challengeController extends \BaseController {
         // return ($input);
           try {
              $Challenge = new Challenge();  
-                $Chaleng = Challenge::where('id','=',$inputData['challengeId'])->first();
+                $Chaleng = Challenge::where('ch_id','=',$inputData['challengeId'])->first();
              if($Chaleng) {
                 // return $Chaleng;
                 return \Illuminate\Support\Facades\Redirect::back()->with('message', 'danger= Challenge already exsit' );
@@ -66,6 +66,7 @@ class challengeController extends \BaseController {
              
 
              $Challenge->No_Of_Levels = $inputData['No_Of_Levels'];
+             $Challenge->ch_id = $inputData['challengeId'];
              
              $Challenge->save();
 
@@ -182,8 +183,50 @@ class challengeController extends \BaseController {
             return CommonHelper::showException($ex);
         }
     }
+
+    public function updateChallenge() {
+         try {
+            $inputData = Request::all();
+
+            $challenges = Challenge::find($inputData['challengeID']);
+             // return $challenges;
+
+            if(!$challenges ){
+                return \Illuminate\Support\Facades\Redirect::back()->with('message', 'danger= Record Not found..' );
+            }
+            $data = [
+                    'No_Of_Levels' => $inputData['No_Of_Levels']
+                    ];
+            $countCheck = $inputData['No_Of_Levels'] - $challenges->No_Of_Levels;
+            $challenges->update($data);
+            for ($i = 0; $i < $countCheck;  $i++) { 
+            
+                    $Challengelevels = new Challengelevels();
+
+                    $Challengelevels->challengeID = $challenges->id;
+                   
+                     $Challengelevels->level = $i+1;
+
+                     $Challengelevels->No_Of_Days = 0;
+
+                     $Challengelevels->save();
+                }
+            return \Illuminate\Support\Facades\Redirect::back()->with('message', 'success= Successfully updated..' );    
+        } catch (Exception $ex) {
+        return CommonHelper::showException($ex);
+        } catch (Illuminate\Database\QueryException $ex) {
+            return CommonHelper::showException($ex);
+        }
+    }
+
      public function deleteChallengeLevel($id) {
          try {
+
+             $del = Challengelevels::find($id);
+             $temp = Challenge::find($del['challengeID']);
+             $temp->No_Of_Levels = $temp->No_Of_Levels - 1;
+             $temp->update();
+
             Challengelevels::destroy($id);
             return \Illuminate\Support\Facades\Redirect::back()->with('message', 'success= Successfully Deleted..' );;
         } catch (Exception $ex) {
@@ -192,8 +235,33 @@ class challengeController extends \BaseController {
             return CommonHelper::showException($ex);
         }
     }
+
+    //  public function updateChallengeLevel($id) {
+    //      try {
+    //         $challengesLevel = Challengelevels::find($id);
+    //         if(!$challengesLevel ){
+    //             return \Illuminate\Support\Facades\Redirect::back()->with('message', 'danger= Record Not found..' );
+    //         }
+    //         $data = [
+    //                 'level' => $challengesLevel->level + $request->input('level'),
+    //                 'No_Of_Days' => $challengesLevel->No_Of_Days + $request->input('No_Of_Days')
+    //                 ];
+    //         $challengesLevel->update($data);
+    //         return \Illuminate\Support\Facades\Redirect::back()->with('message', 'success= Successfully updated..' );  
+    //     } catch (Exception $ex) {
+    //     return CommonHelper::showException($ex);
+    //     } catch (Illuminate\Database\QueryException $ex) {
+    //         return CommonHelper::showException($ex);
+    //     }
+    // }
+
      public function deleteChallengeLevelDays($id) {
          try {
+            $del = Challengeleveldays::find($id);
+            $temp = Challengelevels::find($del['challengeLevelID']);
+            $temp->No_Of_Days = $temp->No_Of_Days - 1;
+             $temp->update();
+            
             Challengeleveldays::destroy($id);
             return \Illuminate\Support\Facades\Redirect::back()->with('message', 'success= Successfully Deleted..' );
         } catch (Exception $ex) {
@@ -202,4 +270,30 @@ class challengeController extends \BaseController {
             return CommonHelper::showException($ex);
         }
     }
+
+    public function updateChallengeLevelDays() {
+         try {
+             $inputData = Request::all();
+              // return $inputData;
+             if($inputData['No_of_Sets'] <= 0) {
+                return \Illuminate\Support\Facades\Redirect::back()->with('message', 'danger= Validation error, No of set must be greater then 0 ..' );
+             } else if($inputData['Repetition'] <= 0) {
+                return \Illuminate\Support\Facades\Redirect::back()->with('message', 'danger= Validation error, Repetition must be greater then 0 ..' );
+             }
+             $challengesLevelDays = Challengeleveldays::find($inputData['id']);
+            if(!$challengesLevelDays ){
+                return \Illuminate\Support\Facades\Redirect::back()->with('message', 'danger= Record Not found..' );
+            }
+            // return $challengesLevelDays;
+            $challengesLevelDays->No_of_Sets = $inputData['No_of_Sets']; 
+            $challengesLevelDays->Repetition =  $inputData['Repetition'];
+            $challengesLevelDays->update();
+            return \Illuminate\Support\Facades\Redirect::back()->with('message', 'success= Successfully updated..' );  
+        } catch (Exception $ex) {
+        return CommonHelper::showException($ex);
+        } catch (Illuminate\Database\QueryException $ex) {
+            return CommonHelper::showException($ex);
+        }
+    }
+
 }
