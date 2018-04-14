@@ -95,7 +95,7 @@
                                       <div class="col-md-1">Action</div>  
                                     
                                 </div>
-                                @foreach($plansWithdays as $codes)
+                                @foreach($plansWithdays as $ke => $codes)
                                     <div class="row" style="padding: 10px; background-color: #B0BEC5">
                                       <div class="col-md-1"> <?php echo $codes['id']; ?></div>  
                                       <div class="col-md-2"><?php echo $codes['Name']; ?></div>  
@@ -112,22 +112,25 @@
                                         </a>|
                                         <a onclick="return confirm('Are you sure you want to delete this challeng Level?');" href="<?php echo route("deleteChallenge", array('id' => $codes['id'])); ?>" class="btn btn-xs btn-danger"><i class="fa fa-trash-o"></i> </a>
                                       </div>
-                                                                          </div> 
+                                      <div class="col-md-2" style="font-weight: 600 !important;"> Challeng {{$ke + 1}} </div>
+                                              
+                                                </div> 
                                     <div class="container-fluid">
                                       <div id="videoColaps{{$codes['id']}}" class="collapse">  
                                          <div class="row well">
                                               <div class="col-md-1">ID</div>  
-                                              <div class="col-md-2">challengeID</div>  
+                                              <div class="col-md-1">challenge</div>  
                                               <div class="col-md-1">level</div>  
                                               <div class="col-md-1">Days</div>  
                                               <div class="col-md-2">Created at</div>    
                                               <div class="col-md-1">Days</div>
                                               <div class="col-md-1">Action</div>
                                             </div>
-                                            @foreach($codes->Levels as $row)
+                                            @foreach($codes->Levels as $key => $row)
                                              <div class="row" style="padding: 10px; background-color: #CFD8DC; margin-top: 10px">
                                                  <div class="col-md-1"> <?php echo $row['id']; ?></div>  
-                                                  <div class="col-md-2"><?php echo $row['challengeID']; ?></div>  
+                                                  <div class="col-md-2" hidden="true"><?php echo $row['challengeID'];  ?></div>  
+                                                  <div class="col-md-1"><?php echo $codes['Name'];  ?></div>  
                                                   <div class="col-md-1"><?php echo $row['level'];?></div>  
                                                   <div class="col-md-1"> <?php echo $row['No_Of_Days']; ?></div>
                                                   <div class="col-md-2"> <?php echo $row['created_at']; ?></div> 
@@ -141,7 +144,7 @@
                                                 
                                                   <a onclick="return confirm('Are you sure you want to delete this challeng?');" href="<?php echo route("deleteChallengeLevel", array('id' => $row['id'])); ?>" class="btn btn-xs btn-danger"><i class="fa fa-trash-o"></i> </a>
                                                 </div>
-
+                                                <div class="col-md-2" style="font-weight: 600 !important;"> Challeng {{$ke + 1}} / Level {{$key+1}}</div>
                                               </div>
 
                                                <div class="container-fluid" style="">
@@ -153,26 +156,28 @@
                                                       <div class="col-md-1">Id</div>  
                                                       <div class="col-md-1">Level ID</div>  
                                                       <div class="col-md-1">DaySeq</div>  
-                                                      <div class="col-md-2">No_of_Sets</div>
+                                                      <div class="col-md-1">Sets</div>
                                                         <div class="col-md-2">Repetition</div>  
                                                         <div class="col-md-2">created_at</div>
-                                                        <div class="col-md-3">Action</div>
-                                                    </div> 
-                                                   @foreach($row->Challengelevelday as $r)
+                                                        <div class="col-md-2">Action</div>
+                                                    </div>
+                                                   @foreach($row->Challengelevelday as $k => $r)
                                                     <div class="row" style="padding: 1%; background-color: #B0BEC5">
                                                       <div class="col-md-1"> <?php echo $r['id']; ?></div>  
                                                       <div class="col-md-1"><?php echo $r['challengeLevelID']; ?></div>  
                                                       <div class="col-md-1"><?php echo $r['DaySeq'];?></div>  
-                                                      <div class="col-md-2"> <?php echo $r['No_of_Sets']; ?></div>
+                                                      <div class="col-md-1"> <?php echo $r['No_of_Sets']; ?></div>
                                                       <div class="col-md-2"> <?php echo $r['Repetition']; ?></div>
                                                       <div class="col-md-2"> <?php echo $r['created_at']; ?></div>
                                                       
-                                                         <div class="col-md-3"><button onclick="daySetModal({{$r['id']}}, {{$row['id']}}, {{$codes['id']}})" class="btn btn-xs btn-info"><i class="fa fa-plus-square"></i></button> |
+                                                         <div class="col-md-2"><button onclick="daySetModal({{$r['id']}}, {{$row['id']}}, {{$codes['id']}})" class="btn btn-xs btn-info"><i class="fa fa-plus-square"></i></button> |
                                                            <a type="btn btn-info" onclick="openChallengesDaysModel({{$r['id']}},{{ $r['No_of_Sets']}} ,{{ $r['Repetition']}},{{$row['id']}}, {{$codes['id']}})">
                                                             <i class="fa fa-edit"></i>
                                                           </a>|
                                                          <a onclick="return confirm('Are you sure you want to delete this challeng Level Day?');" href="<?php echo route("deleteChallengeLevelDays", array('id' => $r['id'])); ?>" class="btn btn-xs btn-danger"><i class="fa fa-trash-o"></i> </a>
                                                          </div>
+                                                          <div class="col-md-2" style="font-weight: 600 !important;">Level {{$key+1}} / Day {{$k+1}}</div>
+
                                                       
                                                     </div>
                                                     <br>

@@ -175,6 +175,11 @@ class challengeController extends \BaseController {
     }
     public function deleteChallenge($id) {
          try {
+            $preCheck = DB::table('userchallenges')->where('challengeID','=',$id )->get();
+            if($preCheck){
+                            return \Illuminate\Support\Facades\Redirect::back()->with('message', 'danger= Could not be delete, already assigned to user' );;
+
+            }
             Challenge::destroy($id);
             return \Illuminate\Support\Facades\Redirect::back()->with('message', 'success= Successfully Deleted..' );;
         } catch (Exception $ex) {
@@ -222,6 +227,12 @@ class challengeController extends \BaseController {
      public function deleteChallengeLevel($id) {
          try {
 
+                $preCheck = DB::table('userchallengelevels')->where('userchallengeID','=',$id )->get();
+            if($preCheck){
+                            return \Illuminate\Support\Facades\Redirect::back()->with('message', 'danger= Could not be delete, already assigned to user' );;
+
+            }
+
              $del = Challengelevels::find($id);
              $temp = Challenge::find($del['challengeID']);
              $temp->No_Of_Levels = $temp->No_Of_Levels - 1;
@@ -257,6 +268,11 @@ class challengeController extends \BaseController {
 
      public function deleteChallengeLevelDays($id) {
          try {
+            $preCheck = DB::table('userchallengeleveldays')->where('user_challenge_LevelID','=',$id )->get();
+            if($preCheck){
+                            return \Illuminate\Support\Facades\Redirect::back()->with('message', 'danger= Could not be delete, already assigned to user' );;
+
+            }
             $del = Challengeleveldays::find($id);
             $temp = Challengelevels::find($del['challengeLevelID']);
             $temp->No_Of_Days = $temp->No_Of_Days - 1;
