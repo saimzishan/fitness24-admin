@@ -11,11 +11,11 @@ class ExerciseController extends \BaseController {
                 foreach ($exercise as $key => $val) {
                          $exercise[$key]['excerciseVideo'] = ExerciseVideos::where('exerciseID', '=', $val->id)
                         ->join('videos', 'videos.id', '=', 'exercise_videos.videoID')
-                        ->select('videos.*')
+                        ->select('videos.*' ,'exercise_videos.id as evId')
                         ->get();
                 }
                  // return  $exercise;
-                return View:: make("exercise.index", compact("exercise"));
+                return View::make("exercise.index", compact("exercise"));
             }
             else{
                 $exercise = Exercise::get();
@@ -93,23 +93,20 @@ class ExerciseController extends \BaseController {
                                 ->delete();
 
              // return $temp;
-           
+           $dataAray = [];
             for ($i=0; $i<count($temp->exerciseIDs); $i++) {
-                $ExVideo = new ExerciseVideos();
-
-                $ExVideo->videoID = $temp->exerciseIDs[$i];
-                $ExVideo->exerciseID = $id;
-
-                $ExVideo->save();
-
+               array_push($dataAray, 
+                            array('videoID'=>$temp->exerciseIDs[$i], 'exerciseID'=>$id)
+                        );
             }
-
+            // return  $dataAray;
+             $ExVideo = ExerciseVideos::insert($dataAray);
+              return  json_encode($ExVideo);
          } catch (Exception $ex) {
             return CommonHelper::showException($ex);
         } catch (Illuminate\Database\QueryException $ex) {
             return CommonHelper::showException($ex);
         }
-         return json_encode('success');
      }     
       public function postlinkedExs($id) {
         $input = Input::all();
@@ -142,31 +139,36 @@ class ExerciseController extends \BaseController {
          return json_encode('success');
      }
 
-    public function base64_to_jpeg($base64_string,$dirPath, $output_file) {
+    public function base64_to_jpeg($base64_string) {
         // open the output file for writing
 
-        if(!is_dir($dirPath)){
-            mkdir($dirPath, 0777, true);
-        }
-        $ifp = fopen( $output_file, 'wb' );
 
-        // split the string on commas
-        // $data[ 0 ] == "data:image/png;base64"
-        // $data[ 1 ] == <actual base64 string>
-        $data = explode( ',', $base64_string );
+        // open the output file for writing
+                $time = time();
+        $random = Str::random(5);
+        // $ext_array =explode( ',', $base64_string );
+        $imgdata = base64_decode($base64_string);
 
-        // we could add validation here with ensuring count( $data ) > 1
-        fwrite( $ifp, base64_decode( $data[ 1 ] ) );
+        // $data = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAA.';
+        $pos  = strpos($base64_string, ';');
+        $type = explode(':', substr($base64_string, 0, $pos));
+        $type = explode('/', $type[1]);
 
-        // clean up the file resource
-        fclose( $ifp );
+        // return $type;
+        $fill = explode( ',', $base64_string );
+        $data = base64_decode($fill[1]);
+        $name = $random . $time . '.' . $type[1];
+        
+         $image_destination = CommonHelper::$driver['local_img_path'] . $name;
 
-        return $output_file;
+
+            $res = file_put_contents($image_destination, $data );
+
+        return $name;
     }
 
     public function store($id = false) {
         $input = Input::all();
-         // return $input;
          $temp = json_decode($input['body']);
          try {
             //  return json_encode($temp->title);
@@ -175,17 +177,6 @@ class ExerciseController extends \BaseController {
                 $Exercise= Exercise::where('id','=',$id)
                     ->first();
             }
-              $data = $temp->file;
-
-             $time = time();
-             $random = Str::random(5);
-             $name = $random.$time.".jpeg";
-
-
-
-             $file = $this->base64_to_jpeg($data, public_path('uploads/'), public_path('uploads/'.$name));
-
-            $Exercise->image = $name;
             $Exercise->title = $temp->title;
             $Exercise->description = $temp->description;
             $Exercise->arabicTitle = $temp->arabicTitle;
@@ -196,27 +187,32 @@ class ExerciseController extends \BaseController {
             if($id) {
                 $Exercise->update();
             } else {
+                       $data = $temp->file;
+                    
+  //            $time = time();
+  //            $random = Str::random(5);
+  //            $name = $random.$time.".jpeg";
+
+
+             $file = $this->base64_to_jpeg($data);
+             $Exercise->image = $file;
                 $Exercise->save();
 
                 $getID = $Exercise->id;
 
-                for ($i=0; $i<count($temp->exerciseIDs); $i++)
-                {
-                    $ExVideo = new ExerciseVideos();
-
-                    $ExVideo->videoID = $temp->exerciseIDs[$i];
-                    $ExVideo->exerciseID = $getID;
-
-                    $ExVideo->save();
-
+               $dataAray = [];
+                for ($i=0; $i<count($temp->exerciseIDs); $i++) {
+                        array_push($dataAray, 
+                            array('videoID'=> $temp->exerciseIDs[$i], 'exerciseID'=>$getID)
+                        );
                 }
+                 $dayEx =  ExerciseVideos::insert($dataAray);
             }
-    } catch (Exception $ex) {
-        return ($ex);
+        }catch (Exception $ex) {
+            return CommonHelper::showException($ex);
         } catch (Illuminate\Database\QueryException $ex) {
-            return ($ex);
+            return CommonHelper::showException($ex);
         }
-
         return json_encode('success');
 
     }

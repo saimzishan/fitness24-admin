@@ -85,6 +85,7 @@ class VideoHelper {
     }
     
      public static function add_video($inputs) {
+      // return $inputs;
        $userId=Auth::user()->id;
        $tags = "";
        foreach ($inputs['tags'] as $selectedOption)

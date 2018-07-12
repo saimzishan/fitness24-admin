@@ -1,5 +1,4 @@
-@extends('common_templates.basic_template')
-@section('content')
+<?php $__env->startSection('content'); ?>
    
 <div class="page-content-wrapper">
     <div class="page-content">
@@ -44,12 +43,13 @@
                         </div>
                     </div>
                     <div class="portlet-body ">
-                        {{Form::open(array('route' => 'postExercise', 'name'=>'postExercise', 'enctype'=>'multipart/form-data', 'onsubmit'=>'return validateForm()'))}}
+                        <?php echo Form::open(array('route' => 'postExercise', 'name'=>'postExercise', 'enctype'=>'multipart/form-data', 'onsubmit'=>'return validateForm()')); ?>
+
                         <div class="form-body">
                             <?php
                                  if (isset($faq)){
                                     ?>
-                                    <input type="hidden" readonly name="id" id="exerciseID" value="{{$faq->id}}">
+                                    <input type="hidden" readonly name="id" id="exerciseID" value="<?php echo $faq->id; ?>">
                                     <?php
                                 }
                             if (Session::has('message')) {
@@ -62,9 +62,11 @@
                                             <label>Title</label>
                                             <div class="input-group" style="width: 80%">
                                                 <?php if(isset($faq)) { ?>
-                                                {{ Form::text('title',$faq->title,array('id'=>'title','class'=>'form-control','placeholder'=>'Title','required', 'rows' => 2)) }}
+                                                <?php echo Form::text('title',$faq->title,array('id'=>'title','class'=>'form-control','placeholder'=>'Title','required', 'rows' => 2)); ?>
+
                                                 <?php } else { ?>
-                                                {{ Form::text('title',Input::old("title"),array('id'=>'title','class'=>'form-control','placeholder'=>'Title','required', 'rows' => 2)) }}
+                                                <?php echo Form::text('title',Input::old("title"),array('id'=>'title','class'=>'form-control','placeholder'=>'Title','required', 'rows' => 2)); ?>
+
                                                 <?php }?>
                                             </div>
                                         </div>
@@ -74,9 +76,11 @@
                                             <label>Description</label>
                                             <div class="input-group" style="width: 80%">
                                                 <?php if(isset($faq)) { ?>
-                                                {{ Form::textarea('description',$faq->description,array('id'=>'description','class'=>'form-control','placeholder'=>'Description', 'rows' => 2)) }}
+                                                <?php echo Form::textarea('description',$faq->description,array('id'=>'description','class'=>'form-control','placeholder'=>'Description', 'rows' => 2)); ?>
+
                                                 <?php } else { ?>
-                                                {{ Form::textarea('description',Input::old("description"),array('id'=>'description','class'=>'form-control','placeholder'=>'Description', 'rows' => 2)) }}
+                                                <?php echo Form::textarea('description',Input::old("description"),array('id'=>'description','class'=>'form-control','placeholder'=>'Description', 'rows' => 2)); ?>
+
                                                 <?php }?>
                                             </div>
                                         </div>
@@ -85,11 +89,13 @@
                                     <div class="form-group">
                                         <label>Arabic Title</label>
                                         <div class="input-group" style="width: 80%">
-                                            @if(isset($faq) )
-                                                {{ Form::text('arabicTitle',$faq->arabicTitle,array('id'=>'arabicTitle','class'=>'form-control','placeholder'=>'Arabic Title','required')) }}
-                                            @else
-                                                {{ Form::text('arabicTitle',Input::old("arabicTitle"),array('id'=>'arabicTitle','class'=>'form-control','placeholder'=>'Arabic Title','required')) }}
-                                            @endif
+                                            <?php if(isset($faq) ): ?>
+                                                <?php echo Form::text('arabicTitle',$faq->arabicTitle,array('id'=>'arabicTitle','class'=>'form-control','placeholder'=>'Arabic Title','required')); ?>
+
+                                            <?php else: ?>
+                                                <?php echo Form::text('arabicTitle',Input::old("arabicTitle"),array('id'=>'arabicTitle','class'=>'form-control','placeholder'=>'Arabic Title','required')); ?>
+
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                 </div>
@@ -97,11 +103,13 @@
                                     <div class="form-group">
                                         <label>Arabic Description</label>
                                         <div class="input-group" style="width: 80%">
-                                            @if(isset($faq) )
-                                                {{ Form::textarea('arabicDescription',$faq->arabicDescription,array('id'=>'arabicDescription','class'=>'form-control','placeholder'=>'Arabic Description','rows' => 2 )) }}
-                                            @else
-                                                {{ Form::textarea('arabicDescription',Input::old("arabicDescription"),array('id'=>'arabicDescription','class'=>'form-control','placeholder'=>'Arabic Description', 'rows' => 2 )) }}
-                                            @endif
+                                            <?php if(isset($faq) ): ?>
+                                                <?php echo Form::textarea('arabicDescription',$faq->arabicDescription,array('id'=>'arabicDescription','class'=>'form-control','placeholder'=>'Arabic Description','rows' => 2 )); ?>
+
+                                            <?php else: ?>
+                                                <?php echo Form::textarea('arabicDescription',Input::old("arabicDescription"),array('id'=>'arabicDescription','class'=>'form-control','placeholder'=>'Arabic Description', 'rows' => 2 )); ?>
+
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                 </div>
@@ -109,11 +117,13 @@
                                     <div class="form-group">
                                         <label>Duration</label>
                                         <div class="input-group" style="width: 80%">
-                                            @if(isset($faq) )
-                                                {{ Form::text('duration',$faq->duration,array('id'=>'duration','class'=>'form-control','placeholder'=>'Duration')) }}
-                                            @else
-                                                {{ Form::text('duration',Input::old("duration"),array('id'=>'duration','class'=>'form-control','placeholder'=>'Duration',)) }}
-                                            @endif
+                                            <?php if(isset($faq) ): ?>
+                                                <?php echo Form::text('duration',$faq->duration,array('id'=>'duration','class'=>'form-control','placeholder'=>'Duration')); ?>
+
+                                            <?php else: ?>
+                                                <?php echo Form::text('duration',Input::old("duration"),array('id'=>'duration','class'=>'form-control','placeholder'=>'Duration',)); ?>
+
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                 </div>
@@ -121,15 +131,17 @@
                                     <div class="form-group">
                                         <label>Workout Time</label>
                                         <div class="input-group" style="width: 80%">
-                                            @if(isset($faq) )
-                                                {{ Form::text('workoutTime',$faq->workout_time,array('id'=>'workoutTime','class'=>'form-control','placeholder'=>'Workout Time')) }}
-                                            @else
-                                                {{ Form::text('workoutTime',Input::old("workoutTime"),array('id'=>'workoutTime','class'=>'form-control','placeholder'=>'Duration',)) }}
-                                            @endif
+                                            <?php if(isset($faq) ): ?>
+                                                <?php echo Form::text('workoutTime',$faq->workout_time,array('id'=>'workoutTime','class'=>'form-control','placeholder'=>'Workout Time')); ?>
+
+                                            <?php else: ?>
+                                                <?php echo Form::text('workoutTime',Input::old("workoutTime"),array('id'=>'workoutTime','class'=>'form-control','placeholder'=>'Duration',)); ?>
+
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                 </div>
-                                @if(!isset($faq) )
+                                <?php if(!isset($faq) ): ?>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Upload Image</label>
@@ -140,8 +152,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                @endif
-                                @if(!isset($faq) )
+                                <?php endif; ?>
+                                <?php if(!isset($faq) ): ?>
                                     <div class="col-md-12">
                                     <label>Select Video(s)</label>
                                     <table id="videoTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
@@ -154,37 +166,40 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach($videos as $row)
+                                            <?php foreach($videos as $row): ?>
                                                 <tr>
                                                     <td class="hidden">
-                                                        {{$row->id}}
+                                                        <?php echo $row->id; ?>
+
                                                     </td>
                                                     <td>
-                                                        <input type="checkbox" class="videoCheckbox" id="{{$row->id}}">
+                                                        <input type="checkbox" class="videoCheckbox" id="<?php echo $row->id; ?>">
                                                     </td>
                                                     <td>
-                                                       {{$row->title_en}}
+                                                       <?php echo $row->title_en; ?>
+
                                                     </td>
                                                     <td>
-                                                        <img src="{{CommonHelper::$driver['s3_uploads'] . 'Images/'.$row->thumb}}" width="80"/>
+                                                        <img src="<?php echo CommonHelper::$driver['s3_uploads'] . 'Images/'.$row->thumb; ?>" width="80"/>
                                                     </td>
                                                 </tr>
-                                             @endforeach
+                                             <?php endforeach; ?>
                                         </tbody>
                                     </table>
 
                                 </div>
-                                @endif
+                                <?php endif; ?>
                             </div>
                             <div class="margiv-top-10">
-                                @if(!isset($faq) )
+                                <?php if(!isset($faq) ): ?>
                                     <input type="button" id="SubmitForm" class="btn green" value="Save">
-                                @else
+                                <?php else: ?>
                                     <input type="button" id="updateForm" class="btn green" value="Update">
-                                @endif
+                                <?php endif; ?>
                             </div>
                         </div>
-                        {{ Form::close() }}
+                        <?php echo Form::close(); ?>
+
                     </div>
                 </div>
                 <!-- END EXAMPLE TABLE PORTLET-->
@@ -268,8 +283,8 @@
                 dataType: 'json',
                 success: function( msg ) {
                    // console.log(msg);
-                    window.location = "listAllExercise"
-                    // console.log(msg);
+                    // window.location = "listAllExercise"
+                    console.log(msg);
                 },
                 error: function(data){
                     console.log(errors);
@@ -329,4 +344,5 @@
     } );
 
 </script>
-@stop
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('common_templates.basic_template', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

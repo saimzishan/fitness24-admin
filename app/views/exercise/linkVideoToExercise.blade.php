@@ -137,7 +137,8 @@
                 dataType: 'json',
                 success: function( msg ) {
                     localStorage.setItem('message', "1");
-                    window.location = "/listAllExercise";
+                     window.location = "/listAllExercise";
+                    // console.log(msg);
                 },
                 error: function(data){
                     console.log(errors);

@@ -113,7 +113,7 @@
                                         </div>
                                         @foreach($codes->excerciseVideo as $row)   
                                             <div class="row" style="padding: 10px; background-color: #CFD8DC; margin-top: 10px">
-                                                 <div class="col-md-1"> <?php echo $row['id']; ?></div>  
+                                                 <div class="col-md-1"> <?php echo $row['evId']; ?></div>  
                                                   <div class="col-md-1"><?php echo $row['title_en']; ?></div>  
                                                   <div class="col-md-1"><?php echo $row['title_ar'];?></div>  
                                                   <div class="col-md-2"> <?php echo $row['description_en']; ?></div>
@@ -127,7 +127,7 @@
                                                       </video>
                                                   </div> 
                                                   <div class="col-md-1">
-                                                        <button type="button" class="btn btn-default" onclick="deleteVideoById({{$row['id']}})" style="text-decoration:none; color: #ff0000" title="Remove">
+                                                        <button type="button" class="btn btn-default" onclick="deleteVideoById({{$row['evId']}})" style="text-decoration:none; color: #ff0000" title="Remove">
                                                     <div class="fa fa-trash-o"></div>
                                                     </button>
                                                   </div>
